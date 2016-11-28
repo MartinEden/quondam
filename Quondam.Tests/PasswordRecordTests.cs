@@ -16,5 +16,14 @@ namespace MartinEden.Quondam.Tests
             var record = new PasswordRecord("abc", noon);
             return record.IsFresh(noon + TimeSpan.FromSeconds(elapsed));
         }
+
+        [Test]
+        public void RecordOnlyValidatesPasswordItWasCreatedWith()
+        {
+            var record = new PasswordRecord("a", DateTime.Now);
+            Assert.IsTrue(record.ValidatePassword("a"));
+            Assert.IsFalse(record.ValidatePassword("b"));
+            Assert.IsFalse(record.ValidatePassword(""));
+        }
     }
 }

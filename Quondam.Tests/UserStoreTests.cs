@@ -73,7 +73,7 @@ namespace MartinEden.Quondam.Tests
         private static void checkRecord(string expectedPassword, DateTime expectedTimestamp, PasswordRecord record)
         {
             Assert.IsNotNull(record);
-            Assert.AreEqual(expectedPassword, record.Password);
+            Assert.IsTrue(record.ValidatePassword(expectedPassword));
             Assert.AreEqual(expectedTimestamp, record.Timestamp);
         }
     }

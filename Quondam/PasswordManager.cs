@@ -28,7 +28,7 @@ namespace MartinEden.Quondam
         public bool ValidatePassword(string username, string password)
         {
             var record = store.GetPassword(username);
-            if (record != null && record.IsFresh(clock.Now) && record.Password == password)
+            if (record != null && record.IsFresh(clock.Now) && record.ValidatePassword(password))
             {
                 store.ClearPassword(username);
                 return true;
