@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,12 +8,14 @@ namespace MartinEden.Quondam.Tests
     public class PasswordManagerTests
     {
         private IPasswordManager manager;
+        private FakeClock clock;
         private const string user = "foo";
 
         [SetUp]
         public void CreateManager()
         {
-            manager = new PasswordManager();
+            clock = new FakeClock(DateTime.Now);
+            manager = new PasswordManager(clock);
         }
 
         [Test]
@@ -81,6 +84,18 @@ namespace MartinEden.Quondam.Tests
             string second = manager.GenerateOneTimePassword(user);
             Assert.IsFalse(manager.ValidatePassword(user, first));
             Assert.IsTrue(manager.ValidatePassword(user, second));
+        }
+
+        [TestCase(0, ExpectedResult = true)]
+        [TestCase(15, ExpectedResult = true)]
+        [TestCase(30, ExpectedResult = true)]
+        [TestCase(30.001, ExpectedResult = false)]
+        [TestCase(60, ExpectedResult = false)]
+        public bool PasswordExpiresAfterThirtySeconds(double elapsedSeconds)
+        {
+            string password = manager.GenerateOneTimePassword(user);
+            clock.Advance(TimeSpan.FromSeconds(elapsedSeconds));
+            return manager.ValidatePassword(user, password);
         }
     }
 }

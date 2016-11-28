@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClockTests.cs" />
+    <Compile Include="FakeClock.cs" />
     <Compile Include="PasswordManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
