@@ -1,3 +1,4 @@
+using NLog;
 using System;
 using System.Web.Security;
 
@@ -5,10 +6,11 @@ namespace MartinEden.Quondam
 {
     public class PasswordManager : IPasswordManager
     {
+        internal static readonly TimeSpan MaximumPasswordAge = TimeSpan.FromSeconds(30);
+        private static Logger logger = LogManager.GetLogger("PasswordAudit");
+
         private IClock clock;
         private UserStore store;
-
-        internal static readonly TimeSpan MaximumPasswordAge = TimeSpan.FromSeconds(30);
 
         public PasswordManager()
             : this(new RealClock()) { }
@@ -22,6 +24,7 @@ namespace MartinEden.Quondam
         {
             string password = Membership.GeneratePassword(16, 0);
             store.StorePassword(username, password, clock.Now);
+            logger.Info("Generated password for user '{0}'", username);
             return password;
         }
 
@@ -31,9 +34,14 @@ namespace MartinEden.Quondam
             if (record != null && record.IsFresh(clock.Now) && record.ValidatePassword(password))
             {
                 store.ClearPassword(username);
+                logger.Info("Successful login for user '{0}'", username);
                 return true;
             }
-            return false;
+            else
+            {
+                logger.Warn("Failed login attempt for user '{0}' using bad password '{1}'", username, password);
+                return false;
+            }
         }
     }
 }
