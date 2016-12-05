@@ -48,6 +48,7 @@
     <Compile Include="FakeClock.cs" />
     <Compile Include="PasswordManagerTests.cs" />
     <Compile Include="PasswordRecordTests.cs" />
+    <Compile Include="TestConstants.cs" />
     <Compile Include="UserStoreTests.cs" />
   </ItemGroup>
   <ItemGroup>

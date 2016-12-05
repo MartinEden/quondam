@@ -6,15 +6,17 @@ namespace MartinEden.Quondam
     internal class UserStore
     {
         private Dictionary<string, PasswordRecord> records;
+        private readonly int hashStrength;
 
-        internal UserStore()
+        internal UserStore(int hashStrength)
         {
+            this.hashStrength = hashStrength;
             records = new Dictionary<string, PasswordRecord>();
         }
 
         internal void StorePassword(string username, string password, DateTime timestamp)
         {
-            records[username] = new PasswordRecord(password, timestamp);
+            records[username] = new PasswordRecord(password, timestamp, hashStrength);
         }
 
         internal PasswordRecord GetPassword(string username)

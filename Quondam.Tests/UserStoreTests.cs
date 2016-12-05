@@ -11,7 +11,7 @@ namespace MartinEden.Quondam.Tests
         [SetUp]
         public void CreateStore()
         {
-            store = new UserStore();
+            store = new UserStore(TestConstants.HashStrength);
         }
 
         [Test]

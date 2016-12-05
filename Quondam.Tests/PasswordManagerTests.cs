@@ -15,7 +15,7 @@ namespace MartinEden.Quondam.Tests
         public void CreateManager()
         {
             clock = new FakeClock(DateTime.Now);
-            manager = new PasswordManager(clock);
+            manager = new PasswordManager(clock, TestConstants.HashStrength);
         }
 
         [Test]

@@ -7,17 +7,18 @@ namespace MartinEden.Quondam
     public class PasswordManager : IPasswordManager
     {
         internal static readonly TimeSpan MaximumPasswordAge = TimeSpan.FromSeconds(30);
+        internal const int DefaultHashStrength = 100000;
         private static Logger logger = LogManager.GetLogger("PasswordAudit");
 
         private IClock clock;
         private UserStore store;
 
         public PasswordManager()
-            : this(new RealClock()) { }
-        internal PasswordManager(IClock clock)
+            : this(new RealClock(), DefaultHashStrength) { }
+        internal PasswordManager(IClock clock, int hashStrength)
         {
             this.clock = clock;
-            store = new UserStore();
+            store = new UserStore(hashStrength);
         }
 
         public string GenerateOneTimePassword(string username)
